@@ -1,0 +1,16 @@
+.login-main {
+    padding: 20px;
+}
+
+.login-title {
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.login-title input {
+    margin-left: 10px;
+    text-decoration: none;
+}

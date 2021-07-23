@@ -1,19 +1,22 @@
 import React, {useState} from 'react';
 import {Redirect, Route} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
-import { logIn, logOut } from '../actions';
+import { logIn } from '../actions';
 import api from "../apis/api";
+import Register from './Register';
+import "../css/login.css";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [onClickRegBtn, setOnClickRegBtn] = useState(false);
+
+    // redux
     const isLogged = useSelector(state => state.isLoggedReducer);
     const dispatch = useDispatch();
 
     const onSubmit = async e => {
         e.preventDefault();
-        console.log(email, password);
-
         try{
             const result = await api.post("/api/auth", { email, password});
             const store = {token: result.data, date: new Date()};
@@ -23,36 +26,43 @@ function Login() {
         catch(ex){
             alert("Invalid email or password, please try again...");
         }
+    };
+
+    const clickedRegisterBtn = ()=>{
+        setOnClickRegBtn(!onClickRegBtn)
     }
 
     return (
         <Route path="/login">
             {(isLogged)? <Redirect to="/dashboard"/> : null}
-            <div>
-                Login page
+            <>
                 <div className="login-main">
                     <form onSubmit={ e => onSubmit(e) }>
                         <div className="login-title">
-                            User Email
-                        </div>
-                        <input 
+                            <p>User Email</p>
+                            <input 
                             className="login-input-email" 
                             value={email}
                             onChange = { e => setEmail(e.target.value) }
-                        />
-                        <div className="login-title">
-                            Password
+                            />
                         </div>
-                        <input 
+                        <div className="login-title">
+                            <p>Password</p>
+                            <input 
                             className="login-input-password"
                             type="password"
                             value={password}
                             onChange={ e => setPassword(e.target.value) }
-                        />
+                            />
+                        </div>
                         <button className="login-button">Log in</button>
                     </form>
                 </div>
-            </div>
+                <div className="register-main">
+                    <button onClick={() => clickedRegisterBtn()}>Register</button>
+                    {(onClickRegBtn)? <Register callback={setOnClickRegBtn}/>: null}
+                </div>
+            </>
         </Route>
     )
 }
