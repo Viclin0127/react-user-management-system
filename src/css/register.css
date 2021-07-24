@@ -1,9 +1,13 @@
-.login-main {
-    padding: 20px;
-    min-width: 50%;
+
+.register-form {
+    margin-top: 50px;
 }
 
-.login-title {
+.register-header {
+    margin-bottom: 20px;
+}
+
+.register-title {
     font-size: 18px;
     display: flex;
     justify-content: space-between;
@@ -11,7 +15,7 @@
     margin-bottom: 20px;
 }
 
-.login-title input {
+.register-title input {
     margin-left: 10px;
     line-height: 150%;
     padding:3px 2px;
@@ -19,31 +23,14 @@
 
 }
 
-.login-button {
+.register-submit-button {
     width: 100%;
     padding: 10px 8px;
-    background-color:#9beccf; 
+    background-color: rgb(150, 222, 247); 
     border: none;
     font-size: 18px;
     cursor: pointer;
     border-radius: 8px;
     margin: 10px 0;
     text-transform: uppercase;
-}
-
-.register-main {
-    padding: 20px;
-    min-width: 50%;
-}
-
-.register-paragraph {
-    font-size: 14px;
-}
-
-.register-paragraph button {
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: blue;
-    text-decoration: underline;
 }

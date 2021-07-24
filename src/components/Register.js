@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { postUser } from '../actions';
+import "../css/register.css";
 
 function Register({callback}) {
     const [userNameReg, setUserNameReg] = useState("");
@@ -19,7 +20,10 @@ function Register({callback}) {
     }
 
     return (
-        <form onSubmit={e => onSubmitReg(e)}>
+        <form className="register-form" onSubmit={e => onSubmitReg(e)}>
+            <div className="register-header">
+                Register a new user
+            </div>
             <div className="register-title">
                 User Name
                 <input value={userNameReg} onChange={e=>setUserNameReg(e.target.value)}/>

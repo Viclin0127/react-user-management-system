@@ -7,6 +7,11 @@ import Dashboard from "./components/Dashboard";
 function App() {
   return (
     <BrowserRouter>
+      <div className="header">
+        <div>
+          User Management System
+        </div>
+      </div>
       <div className="App">
         <Login />
         <Dashboard />

@@ -50,9 +50,17 @@ export const putUser = (data)=>{
     }
 }
 
-export const deleteUser = (data)=>{
-    return {
-        type: "DELETE_USER",
-        payload: data
+export const deleteUser = (id)=>{
+    return async (dispatch) => {
+        const store = JSON.parse(localStorage.getItem("auth-token"));
+        if (store){
+            try{
+                const res = await api.delete(`/api/users/${id}`, {headers: {"x-auth-token": store.token}});
+                dispatch({type: "DELETE_USER", payload: res});
+            }
+            catch(err){
+                alert(err.response.data)
+            }
+        }
     }
 }
