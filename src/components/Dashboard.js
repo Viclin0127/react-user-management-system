@@ -6,10 +6,13 @@ import {MdEdit} from "react-icons/md";
 import {RiDeleteBinLine} from "react-icons/ri";
 
 function Dashboard() {
-    const isLogged = useSelector(state => state.isLoggedReducer);
+    const {isLogged,curUser} = useSelector(state => state.isLoggedReducer);
     const users = useSelector(state => state.getUsersReducer);
-    const deletedUser = useSelector(state => state.deleteUserReducer)
     const dispatch = useDispatch();
+
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const [nameUpdate, setNameUpdate] = useState("");
+    const [emailUpdate, setEmailUpdate] = useState("");
 
     useEffect(()=>{
         dispatch(getUsers());
@@ -21,9 +24,21 @@ function Dashboard() {
         dispatch(logOut());
     }
 
-    const onClickDeleteUser = id => {
-        dispatch(deleteUser(id));
-        // TODO: after deleting an user log out the system
+    const onClickDeleteUser = user => {
+        // TODO: pop up declaration window to tell the client
+        dispatch(deleteUser(user, curUser));
+    };
+
+    const onClickUpdateUser = (user) => {
+        // open update bar, validate user (also did this validate in back-end)
+        const store = JSON.parse(localStorage.getItem("auth-token"));
+        if (user._id !== store.curUser._id){ return alert("No permission")}
+        setOpenUpdate(!openUpdate);
+    };
+
+    const onSubmitUpdate = e => {
+        e.preventDefault();
+        // TODO: a PUT request
     }
 
     const renderUsers = (users) =>{
@@ -36,21 +51,47 @@ function Dashboard() {
                         <td>{user.email}</td>
                         <td>{(user.isAdmin)? "Admin" : "User"}</td>
                         <td>
-                            <MdEdit disabled={true} style={{color: "blue", cursor:"pointer"}}/>
-                            <RiDeleteBinLine onClick={() => onClickDeleteUser(user._id)} style={{color: "orangered", cursor:"pointer"}}/>
+                            <MdEdit 
+                                onClick={() => onClickUpdateUser(user)}
+                                style={{color: "blue", cursor:"pointer"}}
+                            />
+                            <RiDeleteBinLine 
+                                onClick={() => onClickDeleteUser(user)} 
+                                style={{color: "orangered", cursor:"pointer"}}
+                            />
                         </td>
                     </tr>
                 )
             })
+        )
+    };
+
+    const renderUpdateBar = ()=>{
+        return (
+            <div className="update-user">
+                <form onSubmit={e => onSubmitUpdate(e)}>
+                    <div>
+                        New User Name
+                        <input value={nameUpdate} onChange={e=>setNameUpdate(e.target.value)}/>
+                    </div>
+                    <div>
+                        New Email
+                        <input value={emailUpdate} onChange={e=>setEmailUpdate(e.target.value)}/>
+                    </div>
+                    <button>Submit</button>
+                </form>
+            </div>
         )
     }
 
     return (
         <Route path="/dashboard">
             {(!isLogged)? <Redirect to="/login"/> : null}
+            <div>{`Hi, ${curUser.name}`}</div>
             <div>
                 <button onClick={() => onClickLogOut()}>Log Out</button>
             </div>
+            {(openUpdate)?renderUpdateBar():null}
             <div>
                 <table>
                     <thead>

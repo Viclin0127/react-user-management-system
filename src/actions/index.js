@@ -1,9 +1,10 @@
 // Actions
 import api from "../apis/api";
 
-export const logIn = () => {
+export const logIn = (curUser) => {
     return {
-        type: "LOG_IN"
+        type: "LOG_IN",
+        payload: curUser
     }
 };
 
@@ -50,13 +51,38 @@ export const putUser = (data)=>{
     }
 }
 
-export const deleteUser = (id)=>{
+export const deleteUser = (user, curUser)=>{
     return async (dispatch) => {
+        
         const store = JSON.parse(localStorage.getItem("auth-token"));
-        if (store){
+        if (!store) return alert("No token provided...")
+
+        if (!curUser.isAdmin){
+            if (user._id !== curUser._id) {
+                alert("No permission...");
+                return
+            }
             try{
-                const res = await api.delete(`/api/users/${id}`, {headers: {"x-auth-token": store.token}});
+                const res = await api.delete("/api/users/delete/myself", {headers: {"x-auth-token": store.token}});
                 dispatch({type: "DELETE_USER", payload: res});
+                
+                // if successfully delete, clear LocalStorage
+                // TODO: automated log out
+                alert("Successfully deleted...")
+                localStorage.clear();
+                dispatch(logOut())
+
+            }
+            catch(err){
+                alert(err.response.data)
+            }
+        }
+        else{
+            try{
+                const res = await api.delete(`/api/users/${user._id}`, {headers: {"x-auth-token": store.token}});
+                dispatch({type: "DELETE_USER", payload: res});
+                alert("Successfully deleted...");
+                // TODO: automated rerender.
             }
             catch(err){
                 alert(err.response.data)

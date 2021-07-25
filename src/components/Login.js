@@ -12,7 +12,7 @@ function Login() {
     const [onClickRegBtn, setOnClickRegBtn] = useState(false);
 
     // redux
-    const isLogged = useSelector(state => state.isLoggedReducer);
+    const {isLogged} = useSelector(state => state.isLoggedReducer);
     const dispatch = useDispatch();
 
     useEffect(()=>{
@@ -24,9 +24,10 @@ function Login() {
         e.preventDefault();
         try{
             const result = await api.post("/api/auth", { email, password});
-            const store = {token: result.data, date: new Date()};
+            const curUser = await api.get("/api/users/me", {headers: {"x-auth-token": result.data}});
+            const store = {token: result.data, date: new Date(), curUser: curUser.data};
             localStorage.setItem("auth-token", JSON.stringify(store));
-            dispatch(logIn());
+            dispatch(logIn(curUser.data));
         }
         catch(ex){
             alert("Invalid email or password, please try again...");
