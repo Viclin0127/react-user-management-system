@@ -1,22 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import { Redirect, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logOut, getUsers, deleteUser } from '../actions';
+import { logOut, getUsers, deleteUser, putUser, logIn } from '../actions';
 import {MdEdit} from "react-icons/md";
 import {RiDeleteBinLine} from "react-icons/ri";
+import "../css/dashboard.css";
 
 function Dashboard() {
     const {isLogged,curUser} = useSelector(state => state.isLoggedReducer);
     const users = useSelector(state => state.getUsersReducer);
+    const updatedUser = useSelector(state => state.putUserReducer);
     const dispatch = useDispatch();
 
-    const [openUpdate, setOpenUpdate] = useState(false);
+    // local states
+    const [openUpdate, setOpenUpdate] = useState({open: false, targetUser: null});
     const [nameUpdate, setNameUpdate] = useState("");
     const [emailUpdate, setEmailUpdate] = useState("");
 
     useEffect(()=>{
         dispatch(getUsers());
-    },[isLogged]);
+    },[isLogged, updatedUser]);
 
     const onClickLogOut = () => {
         // TODO: pop up declaration window to tell the client
@@ -31,14 +34,22 @@ function Dashboard() {
 
     const onClickUpdateUser = (user) => {
         // open update bar, validate user (also did this validate in back-end)
-        const store = JSON.parse(localStorage.getItem("auth-token"));
-        if (user._id !== store.curUser._id){ return alert("No permission")}
-        setOpenUpdate(!openUpdate);
+        if ((user._id !== curUser._id)&& (!curUser.isAdmin)){ 
+            return alert("No permission")
+        }
+        setOpenUpdate({open: !openUpdate.open, targetUser: user});
+        setNameUpdate("");
+        setEmailUpdate("");
     };
 
     const onSubmitUpdate = e => {
         e.preventDefault();
-        // TODO: a PUT request
+
+        const data = {name: nameUpdate, email: emailUpdate};
+        // automated close update bar
+        dispatch(putUser(openUpdate.targetUser, data, curUser, setOpenUpdate));
+        setNameUpdate("")
+        setEmailUpdate("")
     }
 
     const renderUsers = (users) =>{
@@ -52,12 +63,12 @@ function Dashboard() {
                         <td>{(user.isAdmin)? "Admin" : "User"}</td>
                         <td>
                             <MdEdit 
+                                className={((user._id !== curUser._id)&& (!curUser.isAdmin))? "edit-button":"edit-button-active"}
                                 onClick={() => onClickUpdateUser(user)}
-                                style={{color: "blue", cursor:"pointer"}}
                             />
                             <RiDeleteBinLine 
-                                onClick={() => onClickDeleteUser(user)} 
-                                style={{color: "orangered", cursor:"pointer"}}
+                                className={((user._id !== curUser._id)&& (!curUser.isAdmin))? "delete-button":"delete-button-active"}
+                                onClick={() => onClickDeleteUser(user)}
                             />
                         </td>
                     </tr>
@@ -69,16 +80,16 @@ function Dashboard() {
     const renderUpdateBar = ()=>{
         return (
             <div className="update-user">
-                <form onSubmit={e => onSubmitUpdate(e)}>
-                    <div>
+                <form className="update-form" onSubmit={e => onSubmitUpdate(e)}>
+                    <div className="update-title">
                         New User Name
                         <input value={nameUpdate} onChange={e=>setNameUpdate(e.target.value)}/>
                     </div>
-                    <div>
+                    <div className="update-title">
                         New Email
                         <input value={emailUpdate} onChange={e=>setEmailUpdate(e.target.value)}/>
                     </div>
-                    <button>Submit</button>
+                    <button className="update-submit-button">Update</button>
                 </form>
             </div>
         )
@@ -87,14 +98,15 @@ function Dashboard() {
     return (
         <Route path="/dashboard">
             {(!isLogged)? <Redirect to="/login"/> : null}
-            <div>{`Hi, ${curUser.name}`}</div>
-            <div>
-                <button onClick={() => onClickLogOut()}>Log Out</button>
+            <div className="dashboard-header">
+                <div className="dashboard-greeting">{`Hi, ${curUser.name}`}</div>
+                <button className="dashboard-logout" onClick={() => onClickLogOut()}>Log Out</button>
             </div>
-            {(openUpdate)?renderUpdateBar():null}
-            <div>
-                <table>
-                    <thead>
+            
+            {(openUpdate.open)?renderUpdateBar():null}
+            <div className="dashboard-content">
+                <table >
+                    <thead >
                         <tr>
                             <th>ID</th>
                             <th>Name</th>

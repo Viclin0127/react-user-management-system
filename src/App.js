@@ -3,6 +3,7 @@ import './App.css';
 import Login from "./components/Login";
 import {BrowserRouter} from "react-router-dom";
 import Dashboard from "./components/Dashboard";
+import GuideLine from "./components/GuideLine";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Login />
         <Dashboard />
       </div>
+      <GuideLine/>
     </BrowserRouter>
   );
 }

@@ -1,0 +1,124 @@
+.dashboard-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    margin: 10px;
+}
+
+.dashboard-greeting {
+    margin-left: 4%;
+}
+
+.dashboard-logout {
+    padding: 10px;
+    background-color: #9beccf; 
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 8px;
+    text-transform: uppercase;
+    transition: all .2s;
+}
+
+.dashboard-logout:hover {
+    box-shadow: 1px 1px 7px #bdbdbd;
+    transform: translateY(-3px);
+    transition: all .2s;
+}
+
+.update-user {
+    /* width: 50%; */
+}
+
+.update-form{
+    margin: 10px 0;
+
+}
+
+.update-title {
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.update-title input {
+    margin-left: 10px;
+    line-height: 150%;
+    padding:3px 2px;
+    outline: none;
+}
+
+.update-submit-button {
+    width: 100%;
+    padding: 10px 8px;
+    background-color: rgb(150, 222, 247); 
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 10px 0;
+    text-transform: uppercase;
+    transition: all .2s;
+}
+
+.update-submit-button:hover {
+    box-shadow: 1px 1px 7px #bdbdbd;
+    transform: translateY(-3px);
+    transition: all .2s;
+}
+
+.dashboard-content {
+    width: 100%;
+}
+
+table {
+    width: inherit;
+    border-collapse: collapse;
+}
+
+thead {
+    background: rgb(41, 36, 78);
+    color: #fff;
+    height: 50px;
+}
+
+thead th {
+    font-weight: lighter;
+    font-size: 18px;
+}
+
+tbody tr{
+    height: 50px;
+    border-bottom: 2px solid lightgray;
+}
+tbody tr:hover{
+    background: #9beccf;
+}
+
+tbody .edit-button-active {
+    color: rgb(94, 124, 206);
+    cursor: pointer;
+    margin: 7px;
+}
+
+tbody .edit-button {
+    color: rgb(193, 196, 206);
+
+    margin: 7px;
+}
+
+tbody .delete-button-active {
+    color: rgb(240, 95, 116);
+    cursor: pointer;
+    margin: 7px;
+}
+
+tbody .delete-button {
+    color: rgb(193, 196, 206);
+
+    margin: 7px;
+}

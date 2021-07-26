@@ -44,10 +44,43 @@ export const postUser = (data, callback)=>{
     }
 }
 
-export const putUser = (data)=>{
-    return {
-        type: "PUT_USER",
-        payload: data
+export const putUser = (user, data, curUser, callback)=>{
+    return async (dispatch) => {
+
+        const store = JSON.parse(localStorage.getItem("auth-token"));
+        if (!store) return alert("No token provided...");
+        // PUT myself
+        if (!curUser.isAdmin){
+            if (user._id !== curUser._id) {
+                alert("No permission...");
+                return
+            }
+            try{
+                const res = await api.put("/api/users/update/myself", data, {headers: {"x-auth-token": store.token}});
+                dispatch({type: "PUT_USER", payload: res});
+                // TODO: Successfully updated... do something
+                alert("Successfully updated!");
+                callback(false);
+                dispatch(logIn(res.data))
+            }
+            catch(err){
+                alert(err.response.data)
+            }
+        }
+        // PUT (admin only)
+        else {
+            try{
+                const res = await api.put(`/api/users/${user._id}`, data, {headers: {"x-auth-token": store.token}});
+                dispatch({type: "PUT_USER", payload: res});
+                // TODO: Successfully updated... do something
+                alert("Successfully updated by admin user!");
+                callback(false);
+                if (user.isAdmin){dispatch(logIn(res.data))}
+            }
+            catch(err){
+                alert(err.response.data)
+            }
+        }
     }
 }
 
@@ -68,7 +101,7 @@ export const deleteUser = (user, curUser)=>{
                 
                 // if successfully delete, clear LocalStorage
                 // TODO: automated log out
-                alert("Successfully deleted...")
+                alert("Successfully deleted! you will be logged out immediately...")
                 localStorage.clear();
                 dispatch(logOut())
 

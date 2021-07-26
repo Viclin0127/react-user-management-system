@@ -1,0 +1,11 @@
+.guide-line {
+    max-width: 1000px;
+    margin: 60px auto;
+    font-size: 14px;
+    line-height: 150%;
+}
+
+.guide-line-admin {
+    margin-top: 3px;
+    color: lightslategrey
+}
