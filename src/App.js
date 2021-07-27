@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import {BrowserRouter} from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import GuideLine from "./components/GuideLine";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Dashboard />
       </div>
       <GuideLine/>
+      <Footer/>
     </BrowserRouter>
   );
 }

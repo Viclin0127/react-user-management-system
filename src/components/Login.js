@@ -41,7 +41,7 @@ function Login() {
     }
 
     return (
-        <Route path="/login">
+        <Route exact path="/">
             {(isLogged)? <Redirect to="/dashboard"/> : null}
             <>
                 <div className="login-main">

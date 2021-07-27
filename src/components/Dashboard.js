@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Redirect, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logOut, getUsers, deleteUser, putUser, logIn } from '../actions';
+import { logOut, getUsers, deleteUser, putUser } from '../actions';
 import {MdEdit} from "react-icons/md";
 import {RiDeleteBinLine} from "react-icons/ri";
 import "../css/dashboard.css";
@@ -19,7 +19,7 @@ function Dashboard() {
 
     useEffect(()=>{
         dispatch(getUsers());
-    },[isLogged, updatedUser]);
+    },[isLogged, updatedUser, dispatch]);
 
     const onClickLogOut = () => {
         // TODO: pop up declaration window to tell the client
@@ -97,7 +97,7 @@ function Dashboard() {
 
     return (
         <Route path="/dashboard">
-            {(!isLogged)? <Redirect to="/login"/> : null}
+            {(!isLogged)? <Redirect to="/"/> : null}
             <div className="dashboard-header">
                 <div className="dashboard-greeting">{`Hi, ${curUser.name}`}</div>
                 <button className="dashboard-logout" onClick={() => onClickLogOut()}>Log Out</button>

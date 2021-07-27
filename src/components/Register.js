@@ -9,7 +9,7 @@ function Register({callback}) {
     const [passwordReg, setPasswordReg] = useState("");
 
     // redux
-    const newUser = useSelector(state => state.postUserReducer)
+    useSelector(state => state.postUserReducer)
     const dispatch = useDispatch();
 
     const onSubmitReg = e => {
